@@ -27,7 +27,12 @@ def wexcel(base_url,base_url1,mb,exname):
     stulisti = interoperone.Random_StuSel(i)#随机取i个学生的列表
     stulistsum = interoperone.StuList#学生总数的列表
     ExperimentID = interoperone.ExperimentID1#实验id
-    wt = Write_excel("C:\\September_skill\\Brain_Storming\\Brain_test\\write.xlsx")
+    curpath = os.path.dirname(os.path.realpath(__file__))
+    testxlsx = os.path.join(curpath, "write.xlsx")
+# wt = Write_excel("C:\\Users\\Administrator\\PycharmProjects\\Kesgotd_screen_CountScore\\case\\write.xlsx")
+    wt = Write_excel(testxlsx)
+    #wt = Write_excel("C:\\September_skill\\Brain_Storming\\Brain_test\\write.xlsx")
+
     log = Log()
     uioper = test_screen(base_url1)
     uioper.login(mb,"1")#大屏登录
@@ -231,7 +236,10 @@ def wexcel(base_url,base_url1,mb,exname):
     for stuid in stulistsum:
         wt.writee(rown, 1,str(stuid[0]))
         rown+=1
-    excel = Excelread("C:\\September_skill\\Brain_Storming\\Brain_test\\write.xlsx","Sheet")
+    #curpath = os.path.dirname(os.path.realpath(__file__))
+    #testxlsx = os.path.join(curpath, "write.xlsx")
+    excel = Excelread(testxlsx,"Sheet")
+    #excel = Excelread("C:\\September_skill\\Brain_Storming\\Brain_test\\write.xlsx","Sheet")
     table = excel.table
     rowNum = excel.rowNum    # 获取总行数
     colNum = excel.colNum
@@ -313,8 +321,10 @@ def wexcel(base_url,base_url1,mb,exname):
                 wt.writee(i+1, col,0)
         col+=1
 
-
-    excel1 = Excelread("C:\\September_skill\\Brain_Storming\\Brain_test\\write.xlsx","Sheet")
+    #curpath = os.path.dirname(os.path.realpath(__file__))
+    #testxlsx = os.path.join(curpath, "write.xlsx")
+    excel1 = Excelread(testxlsx,"Sheet")
+    #excel1 = Excelread("C:\\September_skill\\Brain_Storming\\Brain_test\\write.xlsx","Sheet")
     rr = excel1.dict_data()
     # print("excel中值列表为：%s"%rr)
     log.info("excel中值列表为：%s"%rr)
@@ -331,25 +341,7 @@ def wexcel(base_url,base_url1,mb,exname):
         wt.writee((r["rowNum"]), 14,Total_Score)
     log.info("----测试结束----")
 
-if __name__ == '__main__':
-    # base_url = "http://192.168.0.167"
-    # base_url1 = "http://192.168.0.167/kesgo/login.html"
-    # mb = "13123123123"
-    # exname = "9.21.3"
-    # wexcel(base_url,base_url1,mb,exname)
-    excel1 = Excelread("F:\\A_kesgo\\Brain_Storming\\Brain_test\\write.xlsx","Sheet")
-    rr = excel1.dict_data()
-    wt = Write_excel("C:\\September_skill\\Brain_Storming\\Brain_test\\write.xlsx")
-    for r in rr:
-        Course_Score = (r["头脑风暴"])+(r["诊断总结"])
-        Group_Score = (r["小组互评"])+(r["教师评分"])
-        Personal_Score = (r["学生之间相互投票"])+(r["系统评分"])+(r["组内互评"])
-        Total_Score = (r["思考题系统得分"])+(r["思考题教师评分"])+(r["头脑风暴"])+(r["诊断总结"])+(r["学生之间相互投票"])+(r["系统评分"])+\
-                     (r["小组互评"])+(r["组内互评"])+(r["教师评分"])
-        wt.writee((r["rowNum"]), 11,Course_Score)
-        wt.writee((r["rowNum"]), 13,Group_Score)
-        wt.writee((r["rowNum"]), 12,Personal_Score)
-        wt.writee((r["rowNum"]), 14,Total_Score)
+
 
 
 

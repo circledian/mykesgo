@@ -25,10 +25,6 @@ class Test_api(unittest.TestCase):
         stuid = data["学生id"]
         sql = "select * from dbo.AFCS_StudentScore a join dbo.AFCS_Experiment b on a.ExperimentID = b.ExperimentID where ExperimentName = '"+experimentname+"' and StudentID = '"+stuid+"'"
         stulist= self.A.mssql_getrows(sql)
-        #167
-        # print("总分是%s"%data["总分"],"库里总分是%s"%float(str(stulist[0][14])))
-        # self.assertTrue(abs(data["总分"] - float(str(stulist[0][14])))<0.01)
-        #123
         print("总分是%s"%data["总分"],"库里总分是%s"%float(str(stulist[0][14])))
         self.assertTrue(abs(data["总分"] - float(str(stulist[0][14])))<0.01)
 

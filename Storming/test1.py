@@ -2,7 +2,8 @@
 import pymssql
 
 
-mssql_info = {"host":'192.168.0.167\SQL2008',
+mssql_info = {#"host":'192.168.0.167\SQL2008',
+              "host":'123.206.230.41',
                "user":'kesgo',
                "passwd":'kesgo',
                "db":'kesgo',

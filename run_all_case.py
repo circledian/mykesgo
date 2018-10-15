@@ -8,6 +8,12 @@ import smtplib
 import os
 import datetime
 from Brain_test import Tstorming
+import unittest
+
+
+
+from Brain_test.Backstage import Operation_back_screen
+from Storming.Generate_Random import *
 #下面三行代码python2报告出现乱码时候可以加上####
 '''import sys
 reload(sys)
@@ -105,12 +111,28 @@ def send_mail(sender, psw, receiver, smtpserver, report_file, port):
 
 
 if __name__ == "__main__":
+    import os
+    import configparser
     from config import readConfig
+
     base_url = readConfig.base_url
     base_url1 = readConfig.base_url1
-    mb = readConfig.mb
-    exname = readConfig.exname
 
+    # mb = readConfig.mb
+    # exname = readConfig.exname
+
+    mb = tecphone_num()
+    exname = Unicode(3)
+    print("生成的手机号码是%s"%mb)
+    print("生成的实验名是%s"%exname)
+    cur_path = os.path.dirname(os.path.realpath(__file__))
+    configPath = os.path.join(cur_path,"config\\cfg.ini")
+    conf = configparser.ConfigParser()
+    conf.read(configPath)
+    conf.set("experiment", "exname",exname)
+    conf.write(open(configPath, "r+"))
+
+    Operation_back_screen.backstage(base_url,mb,exname)
     Tstorming.wexcel(base_url,base_url1,mb,exname)
     all_case = add_case(caseName="Brain_test", rule="test*.py")   #  加载用例
     # # 生成测试报告的路径

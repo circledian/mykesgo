@@ -1,0 +1,2772 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>自动化测试报告,测试结果如下：</title>
+    <meta name="generator" content="HTMLTestRunner 1.2.3"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    
+<style type="text/css" media="screen">
+body        { font-family: verdana, arial, helvetica, sans-serif; font-size: 80%; }
+table       { font-size: 100%; }
+pre         { }
+
+/* -- heading ---------------------------------------------------------------------- */
+h1 {
+	font-size: 16pt;
+	color: gray;
+}
+.heading {
+    margin-top: 0ex;
+    margin-bottom: 1ex;
+}
+
+.heading .attribute {
+    margin-top: 1ex;
+    margin-bottom: 0;
+}
+
+.heading .description {
+    margin-top: 4ex;
+    margin-bottom: 6ex;
+}
+
+/* -- css div popup ------------------------------------------------------------------------ */
+a.popup_link {
+}
+
+a.popup_link:hover {
+    color: red;
+}
+.img{
+	width: 50%;
+	height: 50%;
+	border-collapse: collapse;
+    border: 2px solid #777;
+}
+
+.screenshots {
+    z-index: 100;
+	position:absolute;
+	left: 20%;
+	top: 20%;
+	display: none;
+}
+.close_shots {
+	position:absolute;
+	top:0; left:48%;
+	z-index:99;
+	width:20px;
+}
+.popup_window {
+    display: none;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    /*border: solid #627173 1px; */
+    padding: 10px;
+    background-color: #E6E6D6;
+    font-family: "Lucida Console", "Courier New", Courier, monospace;
+    text-align: left;
+    font-size: 8pt;
+    width: 500px;
+}
+
+}
+/* -- report ------------------------------------------------------------------------ */
+#show_detail_line {
+    margin-top: 3ex;
+    margin-bottom: 1ex;
+}
+#result_table {
+    width: 80%;
+    border-collapse: collapse;
+    border: 1px solid #777;
+}
+#header_row {
+    font-weight: bold;
+    color: white;
+    background-color: #777;
+}
+#result_table td {
+    border: 1px solid #777;
+    padding: 2px;
+}
+#total_row  { font-weight: bold; }
+.passClass  { background-color: #6c6; }
+.failClass  { background-color: #c60; }
+.errorClass { background-color: #c00; }
+.passCase   { color: #6c6; }
+.failCase   { color: #c60; font-weight: bold; }
+.errorCase  { color: #c00; font-weight: bold; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+
+
+/* -- ending ---------------------------------------------------------------------- */
+#ending {
+}
+
+
+.piechart{
+    position:absolute;  ;
+    top:20px;
+    left:300px;
+    width: 200px;
+    float: left;
+    display:  inline;
+}
+
+
+</style>
+
+</head>
+<body>
+<script language="javascript" type="text/javascript">
+output_list = Array();
+
+/* level - 0:Summary; 1:Failed; 2:All */
+function showCase(level) {
+    trs = document.getElementsByTagName("tr");
+    for (var i = 0; i < trs.length; i++) {
+        tr = trs[i];
+        id = tr.id;
+        if (id.substr(0,2) == 'ft') {
+            if (level < 1) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+            }
+        }
+        if (id.substr(0,2) == 'pt') {
+            if (level > 1) {
+                tr.className = '';
+            }
+            else {
+                tr.className = 'hiddenRow';
+            }
+        }
+    }
+}
+
+
+function showClassDetail(cid, count) {
+    var id_list = Array(count);
+    var toHide = 1;
+    for (var i = 0; i < count; i++) {
+        tid0 = 't' + cid.substr(1) + '.' + (i+1);
+        tid = 'f' + tid0;
+        tr = document.getElementById(tid);
+        if (!tr) {
+            tid = 'p' + tid0;
+            tr = document.getElementById(tid);
+        }
+        id_list[i] = tid;
+        if (tr.className) {
+            toHide = 0;
+        }
+    }
+    for (var i = 0; i < count; i++) {
+        tid = id_list[i];
+        if (toHide) {
+            document.getElementById('div_'+tid).style.display = 'none'
+            document.getElementById(tid).className = 'hiddenRow';
+        }
+        else {
+            document.getElementById(tid).className = '';
+        }
+    }
+}
+
+
+function showTestDetail(div_id){
+    var details_div = document.getElementById(div_id)
+    var displayState = details_div.style.display
+    // alert(displayState)
+    if (displayState != 'block' ) {
+        displayState = 'block'
+        details_div.style.display = 'block'
+    }
+    else {
+        details_div.style.display = 'none'
+    }
+}
+
+
+function html_escape(s) {
+    s = s.replace(/&/g,'&amp;');
+    s = s.replace(/</g,'&lt;');
+    s = s.replace(/>/g,'&gt;');
+    return s;
+}
+
+function drawCircle(pass, fail, error){
+    var color = ["#6c6","#c60","#c00"];
+    var data = [pass,fail,error];
+    var text_arr = ["pass", "fail", "error"];
+
+    var canvas = document.getElementById("circle");
+    var ctx = canvas.getContext("2d");
+    var startPoint=0;
+    var width = 20, height = 10;
+    var posX = 112 * 2 + 20, posY = 30;
+    var textX = posX + width + 5, textY = posY + 10;
+    for(var i=0;i<data.length;i++){
+        ctx.fillStyle = color[i];
+        ctx.beginPath();
+        ctx.moveTo(112,84);
+        ctx.arc(112,84,84,startPoint,startPoint+Math.PI*2*(data[i]/(data[0]+data[1]+data[2])),false);
+        ctx.fill();
+        startPoint += Math.PI*2*(data[i]/(data[0]+data[1]+data[2]));
+        ctx.fillStyle = color[i];
+        ctx.fillRect(posX, posY + 20 * i, width, height);
+        ctx.moveTo(posX, posY + 20 * i);
+        ctx.font = 'bold 14px';
+        ctx.fillStyle = color[i];
+        var percent = text_arr[i] + ":"+data[i];
+        ctx.fillText(percent, textX, textY + 20 * i);
+
+    }
+}
+
+function show_shots(obj) {
+	obj.nextElementSibling.style.display="block";
+
+}
+
+function close_shots(obj) {
+	obj.parentElement.style.display="none";
+}
+
+</script>
+<div class="piechart">
+    <div>
+        <canvas id="circle" width="350" height="168" </canvas>
+    </div>
+</div>
+<div class='heading'>
+<h1>自动化测试报告,测试结果如下：</h1>
+<p class='attribute'><strong>开始时间:</strong> 2018-10-17 11:20:38</p>
+<p class='attribute'><strong>耗时:</strong> 0:00:00.197219</p>
+<p class='attribute'><strong>状态:</strong> <span class="tj passCase">Pass</span>90</p>
+
+<p class='description'>用例执行情况如下：</p>
+</div>
+
+
+
+<p id='show_detail_line'>显示
+<a href='javascript:showCase(0)'>概要</a>
+<a href='javascript:showCase(1)'>失败</a>
+<a href='javascript:showCase(2)'>所有</a>
+</p>
+
+<table id='result_table'>
+<colgroup>
+<col align='left' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+</colgroup>
+<tr id='header_row'>
+    <td>测试组/测试用例</td>
+    <td>总数</td>
+    <td>通过</td>
+    <td>失败</td>
+    <td>错误</td>
+    <td>视图</td>
+    <td>错误截图</td>
+</tr>
+
+<tr class='passClass'>
+    <td>test_Brain_test.Test_api</td>
+    <td>90</td>
+    <td>90</td>
+    <td>0</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c1',90)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='pt1.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_Brainstorming_01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.1')" >
+        通过</a></span>
+
+    <div id='div_pt1.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.1: 头脑风暴是36.75 库里头脑风暴是36.75
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_Brainstorming_02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.2')" >
+        通过</a></span>
+
+    <div id='div_pt1.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.2: 头脑风暴是39.0 库里头脑风暴是39.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_Brainstorming_03</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.3')" >
+        通过</a></span>
+
+    <div id='div_pt1.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.3: 头脑风暴是12.75 库里头脑风暴是12.75
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_Brainstorming_04</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.4')" >
+        通过</a></span>
+
+    <div id='div_pt1.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.4: 头脑风暴是39.0 库里头脑风暴是39.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_Brainstorming_05</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.5')" >
+        通过</a></span>
+
+    <div id='div_pt1.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.5: 头脑风暴是15.0 库里头脑风暴是15.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.6' class='hiddenRow'>
+    <td ><div class='testcase'>test_Brainstorming_06</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.6')" >
+        通过</a></span>
+
+    <div id='div_pt1.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.6: 头脑风暴是33.0 库里头脑风暴是33.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.7' class='hiddenRow'>
+    <td ><div class='testcase'>test_Brainstorming_07</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.7')" >
+        通过</a></span>
+
+    <div id='div_pt1.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.7: 头脑风暴是36.75 库里头脑风暴是36.75
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.8' class='hiddenRow'>
+    <td ><div class='testcase'>test_Brainstorming_08</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.8')" >
+        通过</a></span>
+
+    <div id='div_pt1.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.8: 头脑风暴是15.0 库里头脑风暴是15.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.9' class='hiddenRow'>
+    <td ><div class='testcase'>test_Brainstorming_09</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.9')" >
+        通过</a></span>
+
+    <div id='div_pt1.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.9: 头脑风暴是12.75 库里头脑风暴是12.75
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.10' class='hiddenRow'>
+    <td ><div class='testcase'>test_Brainstorming_10</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.10')" >
+        通过</a></span>
+
+    <div id='div_pt1.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.10: 头脑风暴是33.0 库里头脑风暴是33.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.11' class='hiddenRow'>
+    <td ><div class='testcase'>test_Group_performance_01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.11')" >
+        通过</a></span>
+
+    <div id='div_pt1.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.11: 小组表现是0.0 库里小组表现是0.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.12' class='hiddenRow'>
+    <td ><div class='testcase'>test_Group_performance_02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.12')" >
+        通过</a></span>
+
+    <div id='div_pt1.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.12: 小组表现是10.0 库里小组表现是10.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.13' class='hiddenRow'>
+    <td ><div class='testcase'>test_Group_performance_03</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.13')" >
+        通过</a></span>
+
+    <div id='div_pt1.13' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.13').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.13: 小组表现是0.0 库里小组表现是0.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.14' class='hiddenRow'>
+    <td ><div class='testcase'>test_Group_performance_04</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.14')" >
+        通过</a></span>
+
+    <div id='div_pt1.14' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.14').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.14: 小组表现是10.0 库里小组表现是10.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.15' class='hiddenRow'>
+    <td ><div class='testcase'>test_Group_performance_05</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.15')" >
+        通过</a></span>
+
+    <div id='div_pt1.15' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.15').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.15: 小组表现是0.0 库里小组表现是0.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.16' class='hiddenRow'>
+    <td ><div class='testcase'>test_Group_performance_06</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.16')" >
+        通过</a></span>
+
+    <div id='div_pt1.16' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.16').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.16: 小组表现是3.7 库里小组表现是3.7
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.17' class='hiddenRow'>
+    <td ><div class='testcase'>test_Group_performance_07</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.17')" >
+        通过</a></span>
+
+    <div id='div_pt1.17' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.17').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.17: 小组表现是0.0 库里小组表现是0.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.18' class='hiddenRow'>
+    <td ><div class='testcase'>test_Group_performance_08</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.18')" >
+        通过</a></span>
+
+    <div id='div_pt1.18' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.18').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.18: 小组表现是0.0 库里小组表现是0.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.19' class='hiddenRow'>
+    <td ><div class='testcase'>test_Group_performance_09</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.19')" >
+        通过</a></span>
+
+    <div id='div_pt1.19' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.19').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.19: 小组表现是0.0 库里小组表现是0.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.20' class='hiddenRow'>
+    <td ><div class='testcase'>test_Group_performance_10</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.20')" >
+        通过</a></span>
+
+    <div id='div_pt1.20' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.20').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.20: 小组表现是3.7 库里小组表现是3.7
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.21' class='hiddenRow'>
+    <td ><div class='testcase'>test_Inter_group_evaluation_01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.21')" >
+        通过</a></span>
+
+    <div id='div_pt1.21' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.21').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.21: 组内互评是0.0 库里组内互评是0.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.22' class='hiddenRow'>
+    <td ><div class='testcase'>test_Inter_group_evaluation_02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.22')" >
+        通过</a></span>
+
+    <div id='div_pt1.22' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.22').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.22: 组内互评是3.0 库里组内互评是3.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.23' class='hiddenRow'>
+    <td ><div class='testcase'>test_Inter_group_evaluation_03</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.23')" >
+        通过</a></span>
+
+    <div id='div_pt1.23' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.23').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.23: 组内互评是5.0 库里组内互评是5.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.24' class='hiddenRow'>
+    <td ><div class='testcase'>test_Inter_group_evaluation_04</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.24')" >
+        通过</a></span>
+
+    <div id='div_pt1.24' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.24').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.24: 组内互评是1.0 库里组内互评是1.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.25' class='hiddenRow'>
+    <td ><div class='testcase'>test_Inter_group_evaluation_05</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.25')" >
+        通过</a></span>
+
+    <div id='div_pt1.25' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.25').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.25: 组内互评是3.0 库里组内互评是3.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.26' class='hiddenRow'>
+    <td ><div class='testcase'>test_Inter_group_evaluation_06</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.26')" >
+        通过</a></span>
+
+    <div id='div_pt1.26' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.26').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.26: 组内互评是2.0 库里组内互评是2.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.27' class='hiddenRow'>
+    <td ><div class='testcase'>test_Inter_group_evaluation_07</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.27')" >
+        通过</a></span>
+
+    <div id='div_pt1.27' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.27').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.27: 组内互评是0.0 库里组内互评是0.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.28' class='hiddenRow'>
+    <td ><div class='testcase'>test_Inter_group_evaluation_08</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.28')" >
+        通过</a></span>
+
+    <div id='div_pt1.28' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.28').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.28: 组内互评是2.0 库里组内互评是2.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.29' class='hiddenRow'>
+    <td ><div class='testcase'>test_Inter_group_evaluation_09</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.29')" >
+        通过</a></span>
+
+    <div id='div_pt1.29' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.29').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.29: 组内互评是4.0 库里组内互评是4.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.30' class='hiddenRow'>
+    <td ><div class='testcase'>test_Inter_group_evaluation_10</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.30')" >
+        通过</a></span>
+
+    <div id='div_pt1.30' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.30').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.30: 组内互评是1.0 库里组内互评是1.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.31' class='hiddenRow'>
+    <td ><div class='testcase'>test_Mutual_evaluation_of_students_01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.31')" >
+        通过</a></span>
+
+    <div id='div_pt1.31' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.31').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.31: 学生互评是4.75 库里学生互评是4.75
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.32' class='hiddenRow'>
+    <td ><div class='testcase'>test_Mutual_evaluation_of_students_02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.32')" >
+        通过</a></span>
+
+    <div id='div_pt1.32' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.32').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.32: 学生互评是0.0 库里学生互评是0.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.33' class='hiddenRow'>
+    <td ><div class='testcase'>test_Mutual_evaluation_of_students_03</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.33')" >
+        通过</a></span>
+
+    <div id='div_pt1.33' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.33').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.33: 学生互评是0.0 库里学生互评是0.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.34' class='hiddenRow'>
+    <td ><div class='testcase'>test_Mutual_evaluation_of_students_04</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.34')" >
+        通过</a></span>
+
+    <div id='div_pt1.34' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.34').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.34: 学生互评是5.0 库里学生互评是5.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.35' class='hiddenRow'>
+    <td ><div class='testcase'>test_Mutual_evaluation_of_students_05</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.35')" >
+        通过</a></span>
+
+    <div id='div_pt1.35' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.35').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.35: 学生互评是0.0 库里学生互评是0.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.36' class='hiddenRow'>
+    <td ><div class='testcase'>test_Mutual_evaluation_of_students_06</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.36')" >
+        通过</a></span>
+
+    <div id='div_pt1.36' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.36').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.36: 学生互评是4.75 库里学生互评是4.75
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.37' class='hiddenRow'>
+    <td ><div class='testcase'>test_Mutual_evaluation_of_students_07</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.37')" >
+        通过</a></span>
+
+    <div id='div_pt1.37' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.37').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.37: 学生互评是0.0 库里学生互评是0.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.38' class='hiddenRow'>
+    <td ><div class='testcase'>test_Mutual_evaluation_of_students_08</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.38')" >
+        通过</a></span>
+
+    <div id='div_pt1.38' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.38').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.38: 学生互评是0.0 库里学生互评是0.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.39' class='hiddenRow'>
+    <td ><div class='testcase'>test_Mutual_evaluation_of_students_09</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.39')" >
+        通过</a></span>
+
+    <div id='div_pt1.39' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.39').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.39: 学生互评是4.75 库里学生互评是4.75
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.40' class='hiddenRow'>
+    <td ><div class='testcase'>test_Mutual_evaluation_of_students_10</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.40')" >
+        通过</a></span>
+
+    <div id='div_pt1.40' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.40').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.40: 学生互评是4.75 库里学生互评是4.75
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.41' class='hiddenRow'>
+    <td ><div class='testcase'>test_Personal_performance_01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.41')" >
+        通过</a></span>
+
+    <div id='div_pt1.41' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.41').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.41: 个人表现是8.5 库里个人表现是8.5
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.42' class='hiddenRow'>
+    <td ><div class='testcase'>test_Personal_performance_02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.42')" >
+        通过</a></span>
+
+    <div id='div_pt1.42' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.42').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.42: 个人表现是6.25 库里个人表现是6.25
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.43' class='hiddenRow'>
+    <td ><div class='testcase'>test_Personal_performance_03</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.43')" >
+        通过</a></span>
+
+    <div id='div_pt1.43' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.43').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.43: 个人表现是8.25 库里个人表现是8.25
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.44' class='hiddenRow'>
+    <td ><div class='testcase'>test_Personal_performance_04</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.44')" >
+        通过</a></span>
+
+    <div id='div_pt1.44' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.44').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.44: 个人表现是11.0 库里个人表现是11.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.45' class='hiddenRow'>
+    <td ><div class='testcase'>test_Personal_performance_05</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.45')" >
+        通过</a></span>
+
+    <div id='div_pt1.45' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.45').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.45: 个人表现是7.75 库里个人表现是7.75
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.46' class='hiddenRow'>
+    <td ><div class='testcase'>test_Personal_performance_06</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.46')" >
+        通过</a></span>
+
+    <div id='div_pt1.46' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.46').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.46: 个人表现是10.75 库里个人表现是10.75
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.47' class='hiddenRow'>
+    <td ><div class='testcase'>test_Personal_performance_07</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.47')" >
+        通过</a></span>
+
+    <div id='div_pt1.47' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.47').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.47: 个人表现是4.75 库里个人表现是4.75
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.48' class='hiddenRow'>
+    <td ><div class='testcase'>test_Personal_performance_08</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.48')" >
+        通过</a></span>
+
+    <div id='div_pt1.48' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.48').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.48: 个人表现是6.25 库里个人表现是6.25
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.49' class='hiddenRow'>
+    <td ><div class='testcase'>test_Personal_performance_09</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.49')" >
+        通过</a></span>
+
+    <div id='div_pt1.49' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.49').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.49: 个人表现是12.0 库里个人表现是12.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.50' class='hiddenRow'>
+    <td ><div class='testcase'>test_Personal_performance_10</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.50')" >
+        通过</a></span>
+
+    <div id='div_pt1.50' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.50').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.50: 个人表现是9.5 库里个人表现是9.5
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.51' class='hiddenRow'>
+    <td ><div class='testcase'>test_Score_of_question_system_01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.51')" >
+        通过</a></span>
+
+    <div id='div_pt1.51' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.51').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.51: 思考题系统得分是5.0 库里思考题系统得分是5.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.52' class='hiddenRow'>
+    <td ><div class='testcase'>test_Score_of_question_system_02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.52')" >
+        通过</a></span>
+
+    <div id='div_pt1.52' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.52').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.52: 思考题系统得分是5.0 库里思考题系统得分是5.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.53' class='hiddenRow'>
+    <td ><div class='testcase'>test_Score_of_question_system_03</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.53')" >
+        通过</a></span>
+
+    <div id='div_pt1.53' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.53').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.53: 思考题系统得分是5.0 库里思考题系统得分是5.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.54' class='hiddenRow'>
+    <td ><div class='testcase'>test_Score_of_question_system_04</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.54')" >
+        通过</a></span>
+
+    <div id='div_pt1.54' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.54').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.54: 思考题系统得分是5.0 库里思考题系统得分是5.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.55' class='hiddenRow'>
+    <td ><div class='testcase'>test_Score_of_question_system_05</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.55')" >
+        通过</a></span>
+
+    <div id='div_pt1.55' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.55').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.55: 思考题系统得分是5.0 库里思考题系统得分是5.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.56' class='hiddenRow'>
+    <td ><div class='testcase'>test_Score_of_question_system_06</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.56')" >
+        通过</a></span>
+
+    <div id='div_pt1.56' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.56').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.56: 思考题系统得分是5.0 库里思考题系统得分是5.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.57' class='hiddenRow'>
+    <td ><div class='testcase'>test_Score_of_question_system_07</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.57')" >
+        通过</a></span>
+
+    <div id='div_pt1.57' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.57').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.57: 思考题系统得分是5.0 库里思考题系统得分是5.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.58' class='hiddenRow'>
+    <td ><div class='testcase'>test_Score_of_question_system_08</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.58')" >
+        通过</a></span>
+
+    <div id='div_pt1.58' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.58').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.58: 思考题系统得分是5.0 库里思考题系统得分是5.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.59' class='hiddenRow'>
+    <td ><div class='testcase'>test_Score_of_question_system_09</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.59')" >
+        通过</a></span>
+
+    <div id='div_pt1.59' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.59').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.59: 思考题系统得分是5.0 库里思考题系统得分是5.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.60' class='hiddenRow'>
+    <td ><div class='testcase'>test_Score_of_question_system_10</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.60')" >
+        通过</a></span>
+
+    <div id='div_pt1.60' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.60').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.60: 思考题系统得分是5.0 库里思考题系统得分是5.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.61' class='hiddenRow'>
+    <td ><div class='testcase'>test_System_score_01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.61')" >
+        通过</a></span>
+
+    <div id='div_pt1.61' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.61').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.61: 系统评分是3.75 库里系统评分是3.75
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.62' class='hiddenRow'>
+    <td ><div class='testcase'>test_System_score_02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.62')" >
+        通过</a></span>
+
+    <div id='div_pt1.62' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.62').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.62: 系统评分是3.25 库里系统评分是3.25
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.63' class='hiddenRow'>
+    <td ><div class='testcase'>test_System_score_03</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.63')" >
+        通过</a></span>
+
+    <div id='div_pt1.63' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.63').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.63: 系统评分是3.25 库里系统评分是3.25
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.64' class='hiddenRow'>
+    <td ><div class='testcase'>test_System_score_04</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.64')" >
+        通过</a></span>
+
+    <div id='div_pt1.64' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.64').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.64: 系统评分是5.0 库里系统评分是5.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.65' class='hiddenRow'>
+    <td ><div class='testcase'>test_System_score_05</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.65')" >
+        通过</a></span>
+
+    <div id='div_pt1.65' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.65').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.65: 系统评分是4.75 库里系统评分是4.75
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.66' class='hiddenRow'>
+    <td ><div class='testcase'>test_System_score_06</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.66')" >
+        通过</a></span>
+
+    <div id='div_pt1.66' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.66').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.66: 系统评分是4.0 库里系统评分是4.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.67' class='hiddenRow'>
+    <td ><div class='testcase'>test_System_score_07</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.67')" >
+        通过</a></span>
+
+    <div id='div_pt1.67' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.67').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.67: 系统评分是4.75 库里系统评分是4.75
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.68' class='hiddenRow'>
+    <td ><div class='testcase'>test_System_score_08</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.68')" >
+        通过</a></span>
+
+    <div id='div_pt1.68' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.68').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.68: 系统评分是4.25 库里系统评分是4.25
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.69' class='hiddenRow'>
+    <td ><div class='testcase'>test_System_score_09</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.69')" >
+        通过</a></span>
+
+    <div id='div_pt1.69' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.69').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.69: 系统评分是3.25 库里系统评分是3.25
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.70' class='hiddenRow'>
+    <td ><div class='testcase'>test_System_score_10</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.70')" >
+        通过</a></span>
+
+    <div id='div_pt1.70' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.70').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.70: 系统评分是3.75 库里系统评分是3.75
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.71' class='hiddenRow'>
+    <td ><div class='testcase'>test_Teacher_ratings_of_thinking_questions_01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.71')" >
+        通过</a></span>
+
+    <div id='div_pt1.71' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.71').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.71: 思考题系教师评分是0.0 库里思考题系教师评分是0.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.72' class='hiddenRow'>
+    <td ><div class='testcase'>test_Teacher_ratings_of_thinking_questions_02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.72')" >
+        通过</a></span>
+
+    <div id='div_pt1.72' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.72').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.72: 思考题系教师评分是8.0 库里思考题系教师评分是8.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.73' class='hiddenRow'>
+    <td ><div class='testcase'>test_Teacher_ratings_of_thinking_questions_03</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.73')" >
+        通过</a></span>
+
+    <div id='div_pt1.73' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.73').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.73: 思考题系教师评分是6.0 库里思考题系教师评分是6.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.74' class='hiddenRow'>
+    <td ><div class='testcase'>test_Teacher_ratings_of_thinking_questions_04</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.74')" >
+        通过</a></span>
+
+    <div id='div_pt1.74' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.74').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.74: 思考题系教师评分是0.0 库里思考题系教师评分是0.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.75' class='hiddenRow'>
+    <td ><div class='testcase'>test_Teacher_ratings_of_thinking_questions_05</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.75')" >
+        通过</a></span>
+
+    <div id='div_pt1.75' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.75').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.75: 思考题系教师评分是0.0 库里思考题系教师评分是0.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.76' class='hiddenRow'>
+    <td ><div class='testcase'>test_Teacher_ratings_of_thinking_questions_06</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.76')" >
+        通过</a></span>
+
+    <div id='div_pt1.76' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.76').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.76: 思考题系教师评分是10.0 库里思考题系教师评分是10.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.77' class='hiddenRow'>
+    <td ><div class='testcase'>test_Teacher_ratings_of_thinking_questions_07</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.77')" >
+        通过</a></span>
+
+    <div id='div_pt1.77' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.77').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.77: 思考题系教师评分是6.0 库里思考题系教师评分是6.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.78' class='hiddenRow'>
+    <td ><div class='testcase'>test_Teacher_ratings_of_thinking_questions_08</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.78')" >
+        通过</a></span>
+
+    <div id='div_pt1.78' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.78').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.78: 思考题系教师评分是0.0 库里思考题系教师评分是0.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.79' class='hiddenRow'>
+    <td ><div class='testcase'>test_Teacher_ratings_of_thinking_questions_09</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.79')" >
+        通过</a></span>
+
+    <div id='div_pt1.79' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.79').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.79: 思考题系教师评分是0.0 库里思考题系教师评分是0.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.80' class='hiddenRow'>
+    <td ><div class='testcase'>test_Teacher_ratings_of_thinking_questions_10</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.80')" >
+        通过</a></span>
+
+    <div id='div_pt1.80' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.80').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.80: 思考题系教师评分是4.0 库里思考题系教师评分是4.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.81' class='hiddenRow'>
+    <td ><div class='testcase'>test_totalscore_01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.81')" >
+        通过</a></span>
+
+    <div id='div_pt1.81' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.81').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.81: sql是select * from dbo.AFCS_StudentScore a join dbo.AFCS_Experiment b on a.ExperimentID = b.ExperimentID where ExperimentName = '宵祥菀' and StudentID = '1414f3de-7e7b-4821-b05d-01b9040d8ad8'
+表里查询出的{'rowNum': 2, '学生id': '1414f3de-7e7b-4821-b05d-01b9040d8ad8', '思考题系统得分': 5.0, '思考题教师评分': 0.0, '头脑风暴': 12.75, '诊断总结': 24.0, '学生之间相互投票': 4.75, '系统评分': 3.75, '小组互评': 0.0, '教师评分': 0.0, '组内互评': 0.0, '头脑风暴=头脑风暴+诊断总结': 36.75, '个人表现=学生互评+系统评分+组内互评': 8.5, '小组表现=小组互评+教师评分': 0.0, '总分': 50.25}
+库里查询出的[(UUID('150d04ad-2df0-47ab-9250-6a0189c1a63e'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), UUID('1414f3de-7e7b-4821-b05d-01b9040d8ad8'), Decimal('0.00'), Decimal('5.00'), Decimal('0.00'), Decimal('36.75'), Decimal('0.00'), 0, Decimal('0.00'), Decimal('8.50'), Decimal('4.75'), Decimal('3.75'), Decimal('0.00'), Decimal('50.25'), Decimal('0.00'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), '宵祥菀', UUID('d0ce6636-e34a-4e75-b55a-bb867a21b521'), UUID('1c1eb5e3-0543-4908-8f6c-67174e8a9130'), UUID('acb6b7ce-4292-4914-9f33-847de9c41391'), datetime.datetime(2018, 10, 17, 11, 15, 36, 410000), datetime.datetime(2018, 10, 17, 11, 20, 14, 443000), 3, 3, 4, 15, 4, datetime.datetime(2018, 10, 17, 11, 16, 11, 153000), UUID('dd821962-652e-467f-941f-62c3b02e8643'), datetime.datetime(2018, 10, 17, 11, 15, 32, 140000), 2, 5, 15, 10, 5, 15, 5, 15, 0, 0, 0, 30, 30, 0, 20, 10, 10, 15, 5, 5, 20, 45, 35)]
+总分是50.25 库里总分是50.25
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.82' class='hiddenRow'>
+    <td ><div class='testcase'>test_totalscore_02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.82')" >
+        通过</a></span>
+
+    <div id='div_pt1.82' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.82').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.82: sql是select * from dbo.AFCS_StudentScore a join dbo.AFCS_Experiment b on a.ExperimentID = b.ExperimentID where ExperimentName = '宵祥菀' and StudentID = 'f185c7aa-bfe2-43d7-8ad7-48541d95cc28'
+表里查询出的{'rowNum': 3, '学生id': 'f185c7aa-bfe2-43d7-8ad7-48541d95cc28', '思考题系统得分': 5.0, '思考题教师评分': 8.0, '头脑风暴': 15.0, '诊断总结': 24.0, '学生之间相互投票': 0.0, '系统评分': 3.25, '小组互评': 10.0, '教师评分': 0.0, '组内互评': 3.0, '头脑风暴=头脑风暴+诊断总结': 39.0, '个人表现=学生互评+系统评分+组内互评': 6.25, '小组表现=小组互评+教师评分': 10.0, '总分': 68.25}
+库里查询出的[(UUID('f7f8f90a-3d7f-4944-a2f0-0344cb641650'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), UUID('f185c7aa-bfe2-43d7-8ad7-48541d95cc28'), Decimal('0.00'), Decimal('5.00'), Decimal('8.00'), Decimal('39.00'), Decimal('0.00'), 0, Decimal('0.00'), Decimal('6.25'), Decimal('0.00'), Decimal('3.25'), Decimal('10.00'), Decimal('68.25'), Decimal('3.00'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), '宵祥菀', UUID('d0ce6636-e34a-4e75-b55a-bb867a21b521'), UUID('1c1eb5e3-0543-4908-8f6c-67174e8a9130'), UUID('acb6b7ce-4292-4914-9f33-847de9c41391'), datetime.datetime(2018, 10, 17, 11, 15, 36, 410000), datetime.datetime(2018, 10, 17, 11, 20, 14, 443000), 3, 3, 4, 15, 4, datetime.datetime(2018, 10, 17, 11, 16, 11, 153000), UUID('dd821962-652e-467f-941f-62c3b02e8643'), datetime.datetime(2018, 10, 17, 11, 15, 32, 140000), 2, 5, 15, 10, 5, 15, 5, 15, 0, 0, 0, 30, 30, 0, 20, 10, 10, 15, 5, 5, 20, 45, 35)]
+总分是68.25 库里总分是68.25
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.83' class='hiddenRow'>
+    <td ><div class='testcase'>test_totalscore_03</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.83')" >
+        通过</a></span>
+
+    <div id='div_pt1.83' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.83').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.83: sql是select * from dbo.AFCS_StudentScore a join dbo.AFCS_Experiment b on a.ExperimentID = b.ExperimentID where ExperimentName = '宵祥菀' and StudentID = '9cccef8d-5de8-4297-a321-d501fc9fce2b'
+表里查询出的{'rowNum': 4, '学生id': '9cccef8d-5de8-4297-a321-d501fc9fce2b', '思考题系统得分': 5.0, '思考题教师评分': 6.0, '头脑风暴': 12.75, '诊断总结': 0.0, '学生之间相互投票': 0.0, '系统评分': 3.25, '小组互评': 0.0, '教师评分': 0.0, '组内互评': 5.0, '头脑风暴=头脑风暴+诊断总结': 12.75, '个人表现=学生互评+系统评分+组内互评': 8.25, '小组表现=小组互评+教师评分': 0.0, '总分': 32.0}
+库里查询出的[(UUID('13b2c6cf-bbcf-4955-a039-2e496a7c8772'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), UUID('9cccef8d-5de8-4297-a321-d501fc9fce2b'), Decimal('0.00'), Decimal('5.00'), Decimal('6.00'), Decimal('12.75'), Decimal('0.00'), 0, Decimal('0.00'), Decimal('8.25'), Decimal('0.00'), Decimal('3.25'), Decimal('0.00'), Decimal('32.00'), Decimal('5.00'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), '宵祥菀', UUID('d0ce6636-e34a-4e75-b55a-bb867a21b521'), UUID('1c1eb5e3-0543-4908-8f6c-67174e8a9130'), UUID('acb6b7ce-4292-4914-9f33-847de9c41391'), datetime.datetime(2018, 10, 17, 11, 15, 36, 410000), datetime.datetime(2018, 10, 17, 11, 20, 14, 443000), 3, 3, 4, 15, 4, datetime.datetime(2018, 10, 17, 11, 16, 11, 153000), UUID('dd821962-652e-467f-941f-62c3b02e8643'), datetime.datetime(2018, 10, 17, 11, 15, 32, 140000), 2, 5, 15, 10, 5, 15, 5, 15, 0, 0, 0, 30, 30, 0, 20, 10, 10, 15, 5, 5, 20, 45, 35)]
+总分是32.0 库里总分是32.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.84' class='hiddenRow'>
+    <td ><div class='testcase'>test_totalscore_04</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.84')" >
+        通过</a></span>
+
+    <div id='div_pt1.84' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.84').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.84: sql是select * from dbo.AFCS_StudentScore a join dbo.AFCS_Experiment b on a.ExperimentID = b.ExperimentID where ExperimentName = '宵祥菀' and StudentID = '6146a9ff-e1d8-4932-a9a8-f71a78399ab4'
+表里查询出的{'rowNum': 5, '学生id': '6146a9ff-e1d8-4932-a9a8-f71a78399ab4', '思考题系统得分': 5.0, '思考题教师评分': 0.0, '头脑风暴': 15.0, '诊断总结': 24.0, '学生之间相互投票': 5.0, '系统评分': 5.0, '小组互评': 10.0, '教师评分': 0.0, '组内互评': 1.0, '头脑风暴=头脑风暴+诊断总结': 39.0, '个人表现=学生互评+系统评分+组内互评': 11.0, '小组表现=小组互评+教师评分': 10.0, '总分': 65.0}
+库里查询出的[(UUID('fda43ade-3c3e-47d8-904f-7f69dd6f4eb1'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), UUID('6146a9ff-e1d8-4932-a9a8-f71a78399ab4'), Decimal('0.00'), Decimal('5.00'), Decimal('0.00'), Decimal('39.00'), Decimal('0.00'), 0, Decimal('0.00'), Decimal('11.00'), Decimal('5.00'), Decimal('5.00'), Decimal('10.00'), Decimal('65.00'), Decimal('1.00'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), '宵祥菀', UUID('d0ce6636-e34a-4e75-b55a-bb867a21b521'), UUID('1c1eb5e3-0543-4908-8f6c-67174e8a9130'), UUID('acb6b7ce-4292-4914-9f33-847de9c41391'), datetime.datetime(2018, 10, 17, 11, 15, 36, 410000), datetime.datetime(2018, 10, 17, 11, 20, 14, 443000), 3, 3, 4, 15, 4, datetime.datetime(2018, 10, 17, 11, 16, 11, 153000), UUID('dd821962-652e-467f-941f-62c3b02e8643'), datetime.datetime(2018, 10, 17, 11, 15, 32, 140000), 2, 5, 15, 10, 5, 15, 5, 15, 0, 0, 0, 30, 30, 0, 20, 10, 10, 15, 5, 5, 20, 45, 35)]
+总分是65.0 库里总分是65.0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.85' class='hiddenRow'>
+    <td ><div class='testcase'>test_totalscore_05</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.85')" >
+        通过</a></span>
+
+    <div id='div_pt1.85' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.85').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.85: sql是select * from dbo.AFCS_StudentScore a join dbo.AFCS_Experiment b on a.ExperimentID = b.ExperimentID where ExperimentName = '宵祥菀' and StudentID = 'e8f8b0de-d2b4-43d9-b5b3-4147042a04a8'
+表里查询出的{'rowNum': 6, '学生id': 'e8f8b0de-d2b4-43d9-b5b3-4147042a04a8', '思考题系统得分': 5.0, '思考题教师评分': 0.0, '头脑风暴': 15.0, '诊断总结': 0.0, '学生之间相互投票': 0.0, '系统评分': 4.75, '小组互评': 0.0, '教师评分': 0.0, '组内互评': 3.0, '头脑风暴=头脑风暴+诊断总结': 15.0, '个人表现=学生互评+系统评分+组内互评': 7.75, '小组表现=小组互评+教师评分': 0.0, '总分': 27.75}
+库里查询出的[(UUID('d6256f46-2a84-44f3-8eab-f126e68a1a51'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), UUID('e8f8b0de-d2b4-43d9-b5b3-4147042a04a8'), Decimal('0.00'), Decimal('5.00'), Decimal('0.00'), Decimal('15.00'), Decimal('0.00'), 0, Decimal('0.00'), Decimal('7.75'), Decimal('0.00'), Decimal('4.75'), Decimal('0.00'), Decimal('27.75'), Decimal('3.00'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), '宵祥菀', UUID('d0ce6636-e34a-4e75-b55a-bb867a21b521'), UUID('1c1eb5e3-0543-4908-8f6c-67174e8a9130'), UUID('acb6b7ce-4292-4914-9f33-847de9c41391'), datetime.datetime(2018, 10, 17, 11, 15, 36, 410000), datetime.datetime(2018, 10, 17, 11, 20, 14, 443000), 3, 3, 4, 15, 4, datetime.datetime(2018, 10, 17, 11, 16, 11, 153000), UUID('dd821962-652e-467f-941f-62c3b02e8643'), datetime.datetime(2018, 10, 17, 11, 15, 32, 140000), 2, 5, 15, 10, 5, 15, 5, 15, 0, 0, 0, 30, 30, 0, 20, 10, 10, 15, 5, 5, 20, 45, 35)]
+总分是27.75 库里总分是27.75
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.86' class='hiddenRow'>
+    <td ><div class='testcase'>test_totalscore_06</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.86')" >
+        通过</a></span>
+
+    <div id='div_pt1.86' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.86').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.86: sql是select * from dbo.AFCS_StudentScore a join dbo.AFCS_Experiment b on a.ExperimentID = b.ExperimentID where ExperimentName = '宵祥菀' and StudentID = '133d2085-e3f3-452b-bfe9-cedb82085eda'
+表里查询出的{'rowNum': 7, '学生id': '133d2085-e3f3-452b-bfe9-cedb82085eda', '思考题系统得分': 5.0, '思考题教师评分': 10.0, '头脑风暴': 15.0, '诊断总结': 18.0, '学生之间相互投票': 4.75, '系统评分': 4.0, '小组互评': 0.0, '教师评分': 3.7, '组内互评': 2.0, '头脑风暴=头脑风暴+诊断总结': 33.0, '个人表现=学生互评+系统评分+组内互评': 10.75, '小组表现=小组互评+教师评分': 3.7, '总分': 62.45}
+库里查询出的[(UUID('7309b239-3ca0-4bcf-8bbb-a5c3d58ceadb'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), UUID('133d2085-e3f3-452b-bfe9-cedb82085eda'), Decimal('0.00'), Decimal('5.00'), Decimal('10.00'), Decimal('33.00'), Decimal('0.00'), 0, Decimal('0.00'), Decimal('10.75'), Decimal('4.75'), Decimal('4.00'), Decimal('3.70'), Decimal('62.45'), Decimal('2.00'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), '宵祥菀', UUID('d0ce6636-e34a-4e75-b55a-bb867a21b521'), UUID('1c1eb5e3-0543-4908-8f6c-67174e8a9130'), UUID('acb6b7ce-4292-4914-9f33-847de9c41391'), datetime.datetime(2018, 10, 17, 11, 15, 36, 410000), datetime.datetime(2018, 10, 17, 11, 20, 14, 443000), 3, 3, 4, 15, 4, datetime.datetime(2018, 10, 17, 11, 16, 11, 153000), UUID('dd821962-652e-467f-941f-62c3b02e8643'), datetime.datetime(2018, 10, 17, 11, 15, 32, 140000), 2, 5, 15, 10, 5, 15, 5, 15, 0, 0, 0, 30, 30, 0, 20, 10, 10, 15, 5, 5, 20, 45, 35)]
+总分是62.45 库里总分是62.45
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.87' class='hiddenRow'>
+    <td ><div class='testcase'>test_totalscore_07</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.87')" >
+        通过</a></span>
+
+    <div id='div_pt1.87' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.87').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.87: sql是select * from dbo.AFCS_StudentScore a join dbo.AFCS_Experiment b on a.ExperimentID = b.ExperimentID where ExperimentName = '宵祥菀' and StudentID = 'bda864c0-601f-4862-aa1a-5d56a892818b'
+表里查询出的{'rowNum': 8, '学生id': 'bda864c0-601f-4862-aa1a-5d56a892818b', '思考题系统得分': 5.0, '思考题教师评分': 6.0, '头脑风暴': 12.75, '诊断总结': 24.0, '学生之间相互投票': 0.0, '系统评分': 4.75, '小组互评': 0.0, '教师评分': 0.0, '组内互评': 0.0, '头脑风暴=头脑风暴+诊断总结': 36.75, '个人表现=学生互评+系统评分+组内互评': 4.75, '小组表现=小组互评+教师评分': 0.0, '总分': 52.5}
+库里查询出的[(UUID('4b8456fa-af31-49a3-8ff4-d257dafb210d'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), UUID('bda864c0-601f-4862-aa1a-5d56a892818b'), Decimal('0.00'), Decimal('5.00'), Decimal('6.00'), Decimal('36.75'), Decimal('0.00'), 0, Decimal('0.00'), Decimal('4.75'), Decimal('0.00'), Decimal('4.75'), Decimal('0.00'), Decimal('52.50'), Decimal('0.00'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), '宵祥菀', UUID('d0ce6636-e34a-4e75-b55a-bb867a21b521'), UUID('1c1eb5e3-0543-4908-8f6c-67174e8a9130'), UUID('acb6b7ce-4292-4914-9f33-847de9c41391'), datetime.datetime(2018, 10, 17, 11, 15, 36, 410000), datetime.datetime(2018, 10, 17, 11, 20, 14, 443000), 3, 3, 4, 15, 4, datetime.datetime(2018, 10, 17, 11, 16, 11, 153000), UUID('dd821962-652e-467f-941f-62c3b02e8643'), datetime.datetime(2018, 10, 17, 11, 15, 32, 140000), 2, 5, 15, 10, 5, 15, 5, 15, 0, 0, 0, 30, 30, 0, 20, 10, 10, 15, 5, 5, 20, 45, 35)]
+总分是52.5 库里总分是52.5
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.88' class='hiddenRow'>
+    <td ><div class='testcase'>test_totalscore_08</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.88')" >
+        通过</a></span>
+
+    <div id='div_pt1.88' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.88').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.88: sql是select * from dbo.AFCS_StudentScore a join dbo.AFCS_Experiment b on a.ExperimentID = b.ExperimentID where ExperimentName = '宵祥菀' and StudentID = '8218e99b-f3a8-4834-b6c3-0543ea3ab566'
+表里查询出的{'rowNum': 9, '学生id': '8218e99b-f3a8-4834-b6c3-0543ea3ab566', '思考题系统得分': 5.0, '思考题教师评分': 0.0, '头脑风暴': 15.0, '诊断总结': 0.0, '学生之间相互投票': 0.0, '系统评分': 4.25, '小组互评': 0.0, '教师评分': 0.0, '组内互评': 2.0, '头脑风暴=头脑风暴+诊断总结': 15.0, '个人表现=学生互评+系统评分+组内互评': 6.25, '小组表现=小组互评+教师评分': 0.0, '总分': 26.25}
+库里查询出的[(UUID('868c252d-a713-42a8-b88b-5beacfeb32c5'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), UUID('8218e99b-f3a8-4834-b6c3-0543ea3ab566'), Decimal('0.00'), Decimal('5.00'), Decimal('0.00'), Decimal('15.00'), Decimal('0.00'), 0, Decimal('0.00'), Decimal('6.25'), Decimal('0.00'), Decimal('4.25'), Decimal('0.00'), Decimal('26.25'), Decimal('2.00'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), '宵祥菀', UUID('d0ce6636-e34a-4e75-b55a-bb867a21b521'), UUID('1c1eb5e3-0543-4908-8f6c-67174e8a9130'), UUID('acb6b7ce-4292-4914-9f33-847de9c41391'), datetime.datetime(2018, 10, 17, 11, 15, 36, 410000), datetime.datetime(2018, 10, 17, 11, 20, 14, 443000), 3, 3, 4, 15, 4, datetime.datetime(2018, 10, 17, 11, 16, 11, 153000), UUID('dd821962-652e-467f-941f-62c3b02e8643'), datetime.datetime(2018, 10, 17, 11, 15, 32, 140000), 2, 5, 15, 10, 5, 15, 5, 15, 0, 0, 0, 30, 30, 0, 20, 10, 10, 15, 5, 5, 20, 45, 35)]
+总分是26.25 库里总分是26.25
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.89' class='hiddenRow'>
+    <td ><div class='testcase'>test_totalscore_09</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.89')" >
+        通过</a></span>
+
+    <div id='div_pt1.89' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.89').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.89: sql是select * from dbo.AFCS_StudentScore a join dbo.AFCS_Experiment b on a.ExperimentID = b.ExperimentID where ExperimentName = '宵祥菀' and StudentID = 'df55c91a-1d63-4950-a183-df2e099714af'
+表里查询出的{'rowNum': 10, '学生id': 'df55c91a-1d63-4950-a183-df2e099714af', '思考题系统得分': 5.0, '思考题教师评分': 0.0, '头脑风暴': 12.75, '诊断总结': 0.0, '学生之间相互投票': 4.75, '系统评分': 3.25, '小组互评': 0.0, '教师评分': 0.0, '组内互评': 4.0, '头脑风暴=头脑风暴+诊断总结': 12.75, '个人表现=学生互评+系统评分+组内互评': 12.0, '小组表现=小组互评+教师评分': 0.0, '总分': 29.75}
+库里查询出的[(UUID('6d3aa33f-4bff-418c-8671-0a4fdf3f3077'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), UUID('df55c91a-1d63-4950-a183-df2e099714af'), Decimal('0.00'), Decimal('5.00'), Decimal('0.00'), Decimal('12.75'), Decimal('0.00'), 0, Decimal('0.00'), Decimal('12.00'), Decimal('4.75'), Decimal('3.25'), Decimal('0.00'), Decimal('29.75'), Decimal('4.00'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), '宵祥菀', UUID('d0ce6636-e34a-4e75-b55a-bb867a21b521'), UUID('1c1eb5e3-0543-4908-8f6c-67174e8a9130'), UUID('acb6b7ce-4292-4914-9f33-847de9c41391'), datetime.datetime(2018, 10, 17, 11, 15, 36, 410000), datetime.datetime(2018, 10, 17, 11, 20, 14, 443000), 3, 3, 4, 15, 4, datetime.datetime(2018, 10, 17, 11, 16, 11, 153000), UUID('dd821962-652e-467f-941f-62c3b02e8643'), datetime.datetime(2018, 10, 17, 11, 15, 32, 140000), 2, 5, 15, 10, 5, 15, 5, 15, 0, 0, 0, 30, 30, 0, 20, 10, 10, 15, 5, 5, 20, 45, 35)]
+总分是29.75 库里总分是29.75
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.90' class='hiddenRow'>
+    <td ><div class='testcase'>test_totalscore_10</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.90')" >
+        通过</a></span>
+
+    <div id='div_pt1.90' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.90').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.90: sql是select * from dbo.AFCS_StudentScore a join dbo.AFCS_Experiment b on a.ExperimentID = b.ExperimentID where ExperimentName = '宵祥菀' and StudentID = 'd42273c7-2f8e-4c53-a9f9-3e04f904f923'
+表里查询出的{'rowNum': 11, '学生id': 'd42273c7-2f8e-4c53-a9f9-3e04f904f923', '思考题系统得分': 5.0, '思考题教师评分': 4.0, '头脑风暴': 15.0, '诊断总结': 18.0, '学生之间相互投票': 4.75, '系统评分': 3.75, '小组互评': 0.0, '教师评分': 3.7, '组内互评': 1.0, '头脑风暴=头脑风暴+诊断总结': 33.0, '个人表现=学生互评+系统评分+组内互评': 9.5, '小组表现=小组互评+教师评分': 3.7, '总分': 55.2}
+库里查询出的[(UUID('a11bdeba-fc9d-4b25-8fa1-a6d8046a48ce'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), UUID('d42273c7-2f8e-4c53-a9f9-3e04f904f923'), Decimal('0.00'), Decimal('5.00'), Decimal('4.00'), Decimal('33.00'), Decimal('0.00'), 0, Decimal('0.00'), Decimal('9.50'), Decimal('4.75'), Decimal('3.75'), Decimal('3.70'), Decimal('55.20'), Decimal('1.00'), UUID('a0ed4fea-69be-431f-9e37-81adfc664dc8'), '宵祥菀', UUID('d0ce6636-e34a-4e75-b55a-bb867a21b521'), UUID('1c1eb5e3-0543-4908-8f6c-67174e8a9130'), UUID('acb6b7ce-4292-4914-9f33-847de9c41391'), datetime.datetime(2018, 10, 17, 11, 15, 36, 410000), datetime.datetime(2018, 10, 17, 11, 20, 14, 443000), 3, 3, 4, 15, 4, datetime.datetime(2018, 10, 17, 11, 16, 11, 153000), UUID('dd821962-652e-467f-941f-62c3b02e8643'), datetime.datetime(2018, 10, 17, 11, 15, 32, 140000), 2, 5, 15, 10, 5, 15, 5, 15, 0, 0, 0, 30, 30, 0, 20, 10, 10, 15, 5, 5, 20, 45, 35)]
+总分是55.2 库里总分是55.2
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='total_row'>
+    <td>统计</td>
+    <td>90</td>
+    <td>90</td>
+    <td>0</td>
+    <td>0</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+</tr>
+</table>
+<script>
+    drawCircle(90, 0, 0)
+</script>
+
+<div id='ending'>&nbsp;</div>
+
+</body>
+</html>

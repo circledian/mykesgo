@@ -136,8 +136,8 @@ class test_screen():
  def Comments(self,i):
         #结束诊断总结，到小组投票阶段
         #点击知道了按钮
-        self.driver.find_element_by_xpath("//*[@id='summytips']/div[3]/button").click()
-        sleep(3)
+        #self.driver.find_element_by_xpath("//*[@id='summytips']/div[3]/button").click()
+        #sleep(3)
         #点击诊断点评按钮
         self.driver.find_element_by_xpath("//*[@id='fydpbtn']").click()
         sleep(3)

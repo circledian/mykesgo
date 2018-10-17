@@ -122,15 +122,15 @@ if __name__ == "__main__":
     # exname = readConfig.exname
 
     mb = tecphone_num()
-    exname = Unicode(3)
+    exname = GBK2312(3)
     print("生成的手机号码是%s"%mb)
     print("生成的实验名是%s"%exname)
     cur_path = os.path.dirname(os.path.realpath(__file__))
     configPath = os.path.join(cur_path,"config\\cfg.ini")
     conf = configparser.ConfigParser()
-    conf.read(configPath,encoding = "utf-8")
+    conf.read(configPath)
     conf.set("experiment", "exname",exname)
-    conf.write(open(configPath, "r+",encoding = "utf-8"))
+    conf.write(open(configPath, "r+"))
 
     Operation_back_screen.backstage(base_url,mb,exname)
     Tstorming.wexcel(base_url,base_url1,mb,exname)

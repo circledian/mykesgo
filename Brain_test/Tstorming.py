@@ -11,7 +11,7 @@ from Storming.excel import *
 from Storming.logger import *
 from Storming.readexcel import *
 from Storming.score import *
-
+from Storming.Generate_Random import *
 
 #if __name__ == "__main__":
 def wexcel(base_url,base_url1,mb,exname):
@@ -66,10 +66,10 @@ def wexcel(base_url,base_url1,mb,exname):
     def case1():
         for groupstuk in groupstulistk:
             for i in range(random.randint(1,3)):
-                interopertwo.TNBrainCreateSpeak(str(groupstuk[0]),str(groupstuk[1]),str(groupstuk[2]),str(groupstuk[3])) #观点讨论组长发言
+                interopertwo.TNBrainCreateSpeak(str(groupstuk[0]),str(groupstuk[1]),str(groupstuk[2]),str(groupstuk[3]),str(groupstuk[5])) #观点讨论组长发言
                 listcount_case1.append((str(groupstuk[0]),str(groupstuk[1]),str(groupstuk[2])))
                 listcount_case1_1.append(str(groupstuk[1]))
-                uioper.driver.refresh()
+                #uioper.driver.refresh()
                 sleep(3)
     #print("组长数是%s"%k)
     listcount_case2 = []#记录发言的小组id，组长id、小组名称
@@ -139,7 +139,7 @@ def wexcel(base_url,base_url1,mb,exname):
         listcount_discuss[Mem_Stu_Id]=e
         interopertwo.TNSubmitBrainEvaluation(Group_Id,Group_Stu_Id1,Mem_Stu_Id1,f)
         listcount_discuss[Group_Stu_Id1]=f
-        uioper.driver.refresh()
+        #uioper.driver.refresh()
         sleep(3)
     log.info("被评星的学生id和星数：%s"%listcount_discuss)
 
@@ -155,10 +155,10 @@ def wexcel(base_url,base_url1,mb,exname):
     for groupstukk in groupstulistkk:
         interopertwo.AddBrainDiagnosis(str(groupstukk[0]),str(groupstukk[1]),str(groupstukk[3]))
 
-        interopertwo.TNSubmitBrainDiagnosis(str(groupstukk[0]),"neirong"+groupstukk[3],"biaoti")#发送诊断总结
+        interopertwo.TNSubmitBrainDiagnosis(str(groupstukk[0]),Unicode(100)+groupstukk[3],Unicode(10),groupstukk[3])#发送诊断总结
         listcount_count.append(str(groupstukk[0]))
 
-        uioper.driver.refresh()
+        #uioper.driver.refresh()
         sleep(3)
 
     alist = interopertwo.Alist#学生列表

@@ -9,6 +9,7 @@ def Unicode(n):
         s = s + x
     return s
 
+
 def GBK2312(n):
     s = ""
     for i in range(n):

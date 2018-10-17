@@ -133,13 +133,16 @@ class ScreenOperationTwo(ScreenOperationOne):
  def __init__(self,s,base_url,mb,exname):
 #分组后发送观点讨论的组长发言
     super().__init__(s,base_url,mb,exname)
+    sql5 = "select a.GroupID,b.StudentID,a.GroupOrderNo,GroupName,GroupAnotherName,RealName,* from dbo.AFCS_Group a join dbo.AFCS_GroupStudents b on a.GroupID = b.GroupID join dbo.AFCS_StudentInfo c on b.StudentID = c.StudentID where a.ExperimentID = '"+self.ExperimentID1+"' and b.IsLeader = '1'"
+    #B10 = self.A.mssql_getrows(sql10) #根据实验id找小组组号、组长学生id 取第一个小组
+
     sql7 = "select a.GroupID,b.StudentID,a.GroupOrderNo,GroupName,* from dbo.AFCS_Group a join dbo.AFCS_GroupStudents b on a.GroupID = b.GroupID " \
        "where a.ExperimentID = '"+self.ExperimentID1+"'"
     B6 = self.A.mssql_getrows(sql7)
     self.Alist = B6
     self.Alen = len(B6)
     self.a = str(choice(self.Alist)[1])
-    sql5 = "select a.GroupID,b.StudentID,a.GroupOrderNo,GroupName,* from dbo.AFCS_Group a join dbo.AFCS_GroupStudents b on a.GroupID = b.GroupID " \
+    sql10 = "select a.GroupID,b.StudentID,a.GroupOrderNo,GroupName,* from dbo.AFCS_Group a join dbo.AFCS_GroupStudents b on a.GroupID = b.GroupID " \
        "where a.ExperimentID = '"+self.ExperimentID1+"' and b.IsLeader = '1'"
     B5 = self.A.mssql_getrows(sql5) #根据实验id找小组组号、组长学生id 取第一个小组
     self.toGroupID5 = str(B5[1][0])
@@ -217,7 +220,7 @@ class ScreenOperationTwo(ScreenOperationOne):
      }
      TNr1 = self.s.post(TNurl1, json=TNbody1, headers=TNh1)
     # print("发表组内讨论学生ID%s"%StudentID)
- def TNBrainCreateSpeak(self,GroupID,StudentID,GroupOrderNo,GroupName):
+ def TNBrainCreateSpeak(self,GroupID,StudentID,GroupOrderNo,GroupName,Realname):
      #头脑风暴，小组观点
      TNurl2 = urljoin(self.base_url,"kesgo.Service/wcf/DiscussionService.svc/BrainCreateSpeak")
      #TNurl2 = "http://192.168.0.167/kesgo.Service/wcf/DiscussionService.svc/BrainCreateSpeak"
@@ -241,7 +244,15 @@ class ScreenOperationTwo(ScreenOperationOne):
          "User-Agent": "Mozilla/5.0 (Linux; Android 8.1.0; EML-AL00 Build/HUAWEIEML-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/65.0.3325.109 Mobile Safari/537.36"
      }
      TNr2 = self.s.post(TNurl2, json=TNbody2, headers=TNh2)
+     speakid = TNr2.text
+     speakid = speakid.replace("\"", "")
     # print("发表小组观点组名%s"%GroupName,"发表小组观点学生ID%s"%StudentID)
+     TNurl2_siglar = "http://192.168.0.249:18199/signalr/signalr/send?transport=longPolling&connectionToken=AQAAANCMnd8BFdERjHoAwE%2FCl%2BsBAAAAVdYmo0qzSEea%2BwEs7MZ4ngAAAAACAAAAAAAQZgAAAAEAACAAAACZn3n0d8sXPa9%2F9yQVafaaDByIzNd%2F47o4YJENdf7sVQAAAAAOgAAAAAIAACAAAADwnOTM%2BG3%2B6dyxtSLsStkFRSYmG%2BwB0%2BTW2PNPmCsWOTAAAABLZWKSf8JFizkRc4t8o2nnJWSv54WCsVMoQuXoDDBlAF70xSG0qULMpwgY731QKTlAAAAACBygiv41yeYiWcH%2B5sBYESrfJDYogaSBh4rP%2BESMAZkesTFXgpb5bpubOthRlJWDUWevL5PtGX9fQ8NhNj0OBg%3D%3D&groupid="+self.ExperimentID1
+
+     TNbody2_siglar = {"data":"{\"H\":\"kesgohub\",\"M\":\"sendGroupSpeakData\",\"A\":[1,\"{\\\"speakID\\\":\\\""+speakid+"\\\",\\\"groupOrderNo\\\":\\\""+GroupOrderNo+"\\\",\\\"groupName\\\":\\\""+GroupName+"\\\",\\\"speakContent\\\":\\\"小组观点+"+GroupName+"\\\",\\\"groupID\\\":\\\""+GroupID+"\\\",\\\"isLeader\\\":\\\"1\\\",\\\"studentId\\\":\\\""+StudentID+"\\\",\\\"realName\\\":\\\""+Realname+"\\\",\\\"headImage\\\":\\\"/images/common/normalFace.png\\\",\\\"groupAnotherName\\\":\\\""+GroupName+"\\\",\\\"HourAndMinute\\\":\\\"11:28\\\"}\"],\"I\":0}"}
+     TNh2_siglar = {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+           "User-Agent": "Mozilla/5.0 (Linux; Android 8.1.0; EML-AL00 Build/HUAWEIEML-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/68.0.3440.91 Mobile Safari/537.36"}
+     r = requests.post(TNurl2_siglar, data=TNbody2_siglar, headers=TNh2_siglar)
 
 
 
@@ -373,7 +384,7 @@ class ScreenOperationTwo(ScreenOperationOne):
      SaveBrainDiagnosis_r=self.s.post(SaveBrainDiagnosis_url, json=SaveBrainDiagnosis_json, headers=SaveBrainDiagnosis_h)
 
 
- def TNSubmitBrainDiagnosis(self,GroupID,content,title):
+ def TNSubmitBrainDiagnosis(self,GroupID,content,title,GroupName):
    #诊断总结
    TNSubmitBrainDiagnosis_url = urljoin(self.base_url,"kesgo.Service/wcf/DiagnoseService.svc/SubmitBrainDiagnosis")
    #TNSubmitBrainDiagnosis_url = "http://192.168.0.167/kesgo.Service/wcf/DiagnoseService.svc/SubmitBrainDiagnosis"
@@ -392,6 +403,13 @@ class ScreenOperationTwo(ScreenOperationOne):
    TNSubmitBrainDiagnosis_r = self.s.post(TNSubmitBrainDiagnosis_url, json=TNSubmitBrainDiagnosis_body, headers=TNSubmitBrainDiagnosis_h)
  #  print(TNSubmitBrainDiagnosis_r.status_code)
   # print("诊断总结小组ID%s"%GroupID)
+   TNSubmitBrainDiagnosis_url_siglar = "http://192.168.0.249:18199/signalr/signalr/send?transport=longPolling&connectionToken=AQAAANCMnd8BFdERjHoAwE%2FCl%2BsBAAAAVdYmo0qzSEea%2BwEs7MZ4ngAAAAACAAAAAAAQZgAAAAEAACAAAAD45Yaiq1Auw4qqqhddwjCluzrX2ZJ3X0FCPjfPKyMiUwAAAAAOgAAAAAIAACAAAADoAAD0JMluFk4q3xnmOJVYCSWVBBBWvWMWrMPLQSW6TTAAAADm85%2BkLDLvNM9xhF9vSdfhMKOzbHqKsMj%2Bj7jOX4sh3q6n0UiteqnLlxqDfHO%2F4pdAAAAA%2F1T9E0sKXOk%2BQJ%2BzpkHSlNPE%2Bi1ftrnbYDe1yqDAsX0Vm%2BzXr8sA5C8VT8zkFNAhvqapZX3iGv1F91R8ucPSNg%3D%3D&groupid="+self.ExperimentID1
+
+   TNSubmitBrainDiagnosis_body_siglar = {"data":"{\"H\":\"kesgohub\",\"M\":\"sendGroupSpeakData\",\"A\":[5,\"{\\\"groupName\\\":\\\""+GroupName+"\\\",\\\"speakContent\\\":\\\""+content+"\\\",\\\"groupID\\\":\\\""+GroupID+"\\\",\\\"title\\\":\\\""+title+"\\\",\\\"contentImg\\\":\\\"\\\"}\"],\"I\":0}"}
+   TNSubmitBrainDiagnosis_h_siglar = {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+    "User-Agent": "Mozilla/5.0 (Linux; Android 8.1.0; EML-AL00 Build/HUAWEIEML-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/68.0.3440.91 Mobile Safari/537.36"}
+   r = requests.post(TNSubmitBrainDiagnosis_url_siglar, data=TNSubmitBrainDiagnosis_body_siglar, headers=TNSubmitBrainDiagnosis_h_siglar)
+
 
  def Groupvote(self,StudentID,toGroupID):
 #小组投票

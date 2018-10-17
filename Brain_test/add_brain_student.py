@@ -6,6 +6,7 @@ try:
     from urlparse import urljoin
 except ImportError:
     from urllib.parse import urljoin
+from Storming.Generate_Random import *
 #教师登录后，添加班级，在该班级下，添加并编辑十个手机号码随机、学号随机、QQ号、生日随机的学生
 class Add_Student():
     def __init__(self,base_url):
@@ -169,7 +170,7 @@ class Add_Student():
         for ii in  range(0,2):
             for i in range(1,6):
                 phone = self.phone_num()+str(i)
-                name = self.name()
+                name = Unicode(3)
                 #print("手机号码是%s"%phone)
                 c = self.add_stu(teacherid,name,"1",phone,b)
                 #print(c)
@@ -197,7 +198,7 @@ class Add_Student():
 if __name__ == "__main__":
     base_url = "http://192.168.0.167"
     abc = Add_Student(base_url)
-    abc.add_edit_stu("13123123123","aa")
+    abc.add_edit_stu("13915076384","aa")
 
 
 

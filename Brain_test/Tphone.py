@@ -66,7 +66,7 @@ class ScreenOperationOne():
  def WriteQuestion(self,stu):
 #填写思考题（问答题）
      #url = "http://192.168.0.167/kesgo.Service/wcf/CaseService.svc/AddOrUpdateQuestionPreview"
-     url = urljoin(self.base_url,"kesgo.Service/wcf/CaseService.svc/AddOrUpdateQuestionPreview")
+     url = urljoin(self.base_url,"wcf/CaseService.svc/AddOrUpdateQuestionPreview")
      body = {"questionpreviewinfo":
      "{\"QuestionsID\":\""+self.QuestionsID3+"\","
      "\"QuestionsContent\":\""+self.QuestionsContent3+"\","
@@ -87,7 +87,7 @@ class ScreenOperationOne():
      r = self.s.post(url, json=body, headers=h)
      #print(r.status_code)
  #def GetPreviewID(self):
-     url3 = urljoin(self.base_url,"kesgo.Service/wcf/CaseService.svc/GetQuesByWhere")
+     url3 = urljoin(self.base_url,"wcf/CaseService.svc/GetQuesByWhere")
      #url3 = "http://192.168.0.167/kesgo.Service/wcf/CaseService.svc/GetQuesByWhere"
      par = {"expID":self.ExperimentID1,
             "stuID":stu
@@ -109,7 +109,7 @@ class ScreenOperationOne():
 
  #def SubmitQuestion(self,d):
 #提交思考题
-     url2 = urljoin(self.base_url,"kesgo.Service/wcf/CaseService.svc/SaveQuesAnswer")
+     url2 = urljoin(self.base_url,"wcf/CaseService.svc/SaveQuesAnswer")
      #url2 = "http://192.168.0.167/kesgo.Service/wcf/CaseService.svc/SaveQuesAnswer"
      body2 = {"previewInfo":
      "[{\"PreviewID\":\""+d+"\","
@@ -199,7 +199,7 @@ class ScreenOperationTwo(ScreenOperationOne):
 
  def TNGroupDiscussion(self,GroupID,StudentID,GroupName):
      #头脑风暴，组内讨论
-     TNurl1 = urljoin(self.base_url,"kesgo.Service/wcf/DiscussionService.svc/BrainCreateGroupDiscussion")
+     TNurl1 = urljoin(self.base_url,"wcf/DiscussionService.svc/BrainCreateGroupDiscussion")
      #TNurl1 = "http://192.168.0.167/kesgo.Service/wcf/DiscussionService.svc/BrainCreateGroupDiscussion"
      TNbody1 = {
 
@@ -222,7 +222,7 @@ class ScreenOperationTwo(ScreenOperationOne):
     # print("发表组内讨论学生ID%s"%StudentID)
  def TNBrainCreateSpeak(self,GroupID,StudentID,GroupOrderNo,GroupName,Realname):
      #头脑风暴，小组观点
-     TNurl2 = urljoin(self.base_url,"kesgo.Service/wcf/DiscussionService.svc/BrainCreateSpeak")
+     TNurl2 = urljoin(self.base_url,"wcf/DiscussionService.svc/BrainCreateSpeak")
      #TNurl2 = "http://192.168.0.167/kesgo.Service/wcf/DiscussionService.svc/BrainCreateSpeak"
      TNbody2 = {
          "speakEntity":
@@ -247,7 +247,7 @@ class ScreenOperationTwo(ScreenOperationOne):
      speakid = TNr2.text
      speakid = speakid.replace("\"", "")
     # print("发表小组观点组名%s"%GroupName,"发表小组观点学生ID%s"%StudentID)
-     TNurl2_siglar = "http://192.168.0.249:18199/signalr/signalr/send?transport=longPolling&connectionToken=AQAAANCMnd8BFdERjHoAwE%2FCl%2BsBAAAAVdYmo0qzSEea%2BwEs7MZ4ngAAAAACAAAAAAAQZgAAAAEAACAAAACZn3n0d8sXPa9%2F9yQVafaaDByIzNd%2F47o4YJENdf7sVQAAAAAOgAAAAAIAACAAAADwnOTM%2BG3%2B6dyxtSLsStkFRSYmG%2BwB0%2BTW2PNPmCsWOTAAAABLZWKSf8JFizkRc4t8o2nnJWSv54WCsVMoQuXoDDBlAF70xSG0qULMpwgY731QKTlAAAAACBygiv41yeYiWcH%2B5sBYESrfJDYogaSBh4rP%2BESMAZkesTFXgpb5bpubOthRlJWDUWevL5PtGX9fQ8NhNj0OBg%3D%3D&groupid="+self.ExperimentID1
+     TNurl2_siglar = "http://192.168.0.202:18199/signalr/signalr/send?transport=longPolling&connectionToken=AQAAANCMnd8BFdERjHoAwE%2FCl%2BsBAAAAVdYmo0qzSEea%2BwEs7MZ4ngAAAAACAAAAAAAQZgAAAAEAACAAAACZn3n0d8sXPa9%2F9yQVafaaDByIzNd%2F47o4YJENdf7sVQAAAAAOgAAAAAIAACAAAADwnOTM%2BG3%2B6dyxtSLsStkFRSYmG%2BwB0%2BTW2PNPmCsWOTAAAABLZWKSf8JFizkRc4t8o2nnJWSv54WCsVMoQuXoDDBlAF70xSG0qULMpwgY731QKTlAAAAACBygiv41yeYiWcH%2B5sBYESrfJDYogaSBh4rP%2BESMAZkesTFXgpb5bpubOthRlJWDUWevL5PtGX9fQ8NhNj0OBg%3D%3D&groupid="+self.ExperimentID1
 
      TNbody2_siglar = {"data":"{\"H\":\"kesgohub\",\"M\":\"sendGroupSpeakData\",\"A\":[1,\"{\\\"speakID\\\":\\\""+speakid+"\\\",\\\"groupOrderNo\\\":\\\""+GroupOrderNo+"\\\",\\\"groupName\\\":\\\""+GroupName+"\\\",\\\"speakContent\\\":\\\"小组观点+"+GroupName+"\\\",\\\"groupID\\\":\\\""+GroupID+"\\\",\\\"isLeader\\\":\\\"1\\\",\\\"studentId\\\":\\\""+StudentID+"\\\",\\\"realName\\\":\\\""+Realname+"\\\",\\\"headImage\\\":\\\"/images/common/normalFace.png\\\",\\\"groupAnotherName\\\":\\\""+GroupName+"\\\",\\\"HourAndMinute\\\":\\\"11:28\\\"}\"],\"I\":0}"}
      TNh2_siglar = {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -259,7 +259,7 @@ class ScreenOperationTwo(ScreenOperationOne):
 
  def TNBrainCreateTimeInteraction(self,StudentID):
 #我的互动
-    TNurl3 = urljoin(self.base_url,"kesgo.Service/wcf/DiscussionService.svc/BrainCreateTimeInteraction")
+    TNurl3 = urljoin(self.base_url,"wcf/DiscussionService.svc/BrainCreateTimeInteraction")
     #TNurl3 = "http://192.168.0.167/kesgo.Service/wcf/DiscussionService.svc/BrainCreateTimeInteraction"
     TNbody3 = {
         	"timeInteractionEntity":
@@ -277,7 +277,7 @@ class ScreenOperationTwo(ScreenOperationOne):
     TNr3 = self.s.post(TNurl3, json=TNbody3, headers=TNh3)
    # print("发表我的互动学生ID%s"%StudentID)
  def TNSubmitBrainEvaluation(self,GroupID,StudentID,toStudentID,e):
-     GetByNowStageList_url = urljoin(self.base_url,"kesgo.Service/wcf/DiscussionService.svc/GetByNowStageList")
+     GetByNowStageList_url = urljoin(self.base_url,"wcf/DiscussionService.svc/GetByNowStageList")
      #GetByNowStageList_url = "http://192.168.0.167/kesgo.Service/wcf/DiscussionService.svc/GetByNowStageList"
      GetByNowStageList_body = {
          "expID":self.ExperimentID1,
@@ -302,7 +302,7 @@ class ScreenOperationTwo(ScreenOperationOne):
            # return h
  #def TNSubmitBrainEvaluation(self,BrainEvaluationID,AddStudentID):
      #组内互评
-     TNurl4 = urljoin(self.base_url,"kesgo.Service/wcf/DiscussionService.svc/SubmitBrainEvaluation")
+     TNurl4 = urljoin(self.base_url,"wcf/DiscussionService.svc/SubmitBrainEvaluation")
      #TNurl4 = "http://192.168.0.167/kesgo.Service/wcf/DiscussionService.svc/SubmitBrainEvaluation"
      TNbody4 = {
 
@@ -327,7 +327,7 @@ class ScreenOperationTwo(ScreenOperationOne):
     # print("被评星学生的ID%s"%StudentID,"评星数为%s"%e)
  def TNCreateTimeInteraction(self,StudentID):
      #观点分类，我的互动
-     TNurl5 = urljoin(self.base_url,"kesgo.Service/wcf/DiscussionService.svc/CreateTimeInteraction")
+     TNurl5 = urljoin(self.base_url,"wcf/DiscussionService.svc/CreateTimeInteraction")
      #TNurl5 = "http://192.168.0.167/kesgo.Service/wcf/DiscussionService.svc/CreateTimeInteraction"
      TNbody5 = {
          "timeInteractionEntity":
@@ -345,7 +345,7 @@ class ScreenOperationTwo(ScreenOperationOne):
      TNr5 = self.s.post(TNurl5, json=TNbody5, headers=TNh5)
     # print("观点分类发表我的互动学生的ID%s"%StudentID)
  def AddBrainDiagnosis(self,GroupID,StudentID,GroupName):
-     AddBrainDiagnosis_url = urljoin(self.base_url,"kesgo.Service/wcf/DiagnoseService.svc/AddBrainDiagnosis")
+     AddBrainDiagnosis_url = urljoin(self.base_url,"wcf/DiagnoseService.svc/AddBrainDiagnosis")
      #AddBrainDiagnosis_url = "http://192.168.0.167/kesgo.Service/wcf/DiagnoseService.svc/AddBrainDiagnosis"
      AddBrainDiagnosis_json = {
          "braindiagno":
@@ -366,7 +366,7 @@ class ScreenOperationTwo(ScreenOperationOne):
      AddBrainDiagnosis_r = self.s.post(AddBrainDiagnosis_url, json=AddBrainDiagnosis_json, headers=AddBrainDiagnosis_h)
     # print(AddBrainDiagnosis_r.status_code)
  def SaveBrainDiagnosis(self,GroupID,content,title):
-     SaveBrainDiagnosis_url = urljoin(self.base_url,"kesgo.Service/wcf/DiagnoseService.svc/SaveBrainDiagnosis")
+     SaveBrainDiagnosis_url = urljoin(self.base_url,"wcf/DiagnoseService.svc/SaveBrainDiagnosis")
      #SaveBrainDiagnosis_url = "http://192.168.0.167/kesgo.Service/wcf/DiagnoseService.svc/SaveBrainDiagnosis"
      SaveBrainDiagnosis_json = {
          "braindiagno":
@@ -386,7 +386,7 @@ class ScreenOperationTwo(ScreenOperationOne):
 
  def TNSubmitBrainDiagnosis(self,GroupID,content,title,GroupName):
    #诊断总结
-   TNSubmitBrainDiagnosis_url = urljoin(self.base_url,"kesgo.Service/wcf/DiagnoseService.svc/SubmitBrainDiagnosis")
+   TNSubmitBrainDiagnosis_url = urljoin(self.base_url,"wcf/DiagnoseService.svc/SubmitBrainDiagnosis")
    #TNSubmitBrainDiagnosis_url = "http://192.168.0.167/kesgo.Service/wcf/DiagnoseService.svc/SubmitBrainDiagnosis"
    TNSubmitBrainDiagnosis_body = {"braindiagno":
                                       "{\"GroupID\":\""+GroupID+"\","
@@ -403,7 +403,7 @@ class ScreenOperationTwo(ScreenOperationOne):
    TNSubmitBrainDiagnosis_r = self.s.post(TNSubmitBrainDiagnosis_url, json=TNSubmitBrainDiagnosis_body, headers=TNSubmitBrainDiagnosis_h)
  #  print(TNSubmitBrainDiagnosis_r.status_code)
   # print("诊断总结小组ID%s"%GroupID)
-   TNSubmitBrainDiagnosis_url_siglar = "http://192.168.0.249:18199/signalr/signalr/send?transport=longPolling&connectionToken=AQAAANCMnd8BFdERjHoAwE%2FCl%2BsBAAAAVdYmo0qzSEea%2BwEs7MZ4ngAAAAACAAAAAAAQZgAAAAEAACAAAAD45Yaiq1Auw4qqqhddwjCluzrX2ZJ3X0FCPjfPKyMiUwAAAAAOgAAAAAIAACAAAADoAAD0JMluFk4q3xnmOJVYCSWVBBBWvWMWrMPLQSW6TTAAAADm85%2BkLDLvNM9xhF9vSdfhMKOzbHqKsMj%2Bj7jOX4sh3q6n0UiteqnLlxqDfHO%2F4pdAAAAA%2F1T9E0sKXOk%2BQJ%2BzpkHSlNPE%2Bi1ftrnbYDe1yqDAsX0Vm%2BzXr8sA5C8VT8zkFNAhvqapZX3iGv1F91R8ucPSNg%3D%3D&groupid="+self.ExperimentID1
+   TNSubmitBrainDiagnosis_url_siglar = "http://192.168.0.202:18199/signalr/signalr/send?transport=longPolling&connectionToken=AQAAANCMnd8BFdERjHoAwE%2FCl%2BsBAAAAVdYmo0qzSEea%2BwEs7MZ4ngAAAAACAAAAAAAQZgAAAAEAACAAAAD45Yaiq1Auw4qqqhddwjCluzrX2ZJ3X0FCPjfPKyMiUwAAAAAOgAAAAAIAACAAAADoAAD0JMluFk4q3xnmOJVYCSWVBBBWvWMWrMPLQSW6TTAAAADm85%2BkLDLvNM9xhF9vSdfhMKOzbHqKsMj%2Bj7jOX4sh3q6n0UiteqnLlxqDfHO%2F4pdAAAAA%2F1T9E0sKXOk%2BQJ%2BzpkHSlNPE%2Bi1ftrnbYDe1yqDAsX0Vm%2BzXr8sA5C8VT8zkFNAhvqapZX3iGv1F91R8ucPSNg%3D%3D&groupid="+self.ExperimentID1
 
    TNSubmitBrainDiagnosis_body_siglar = {"data":"{\"H\":\"kesgohub\",\"M\":\"sendGroupSpeakData\",\"A\":[5,\"{\\\"groupName\\\":\\\""+GroupName+"\\\",\\\"speakContent\\\":\\\""+content+"\\\",\\\"groupID\\\":\\\""+GroupID+"\\\",\\\"title\\\":\\\""+title+"\\\",\\\"contentImg\\\":\\\"\\\"}\"],\"I\":0}"}
    TNSubmitBrainDiagnosis_h_siglar = {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -413,7 +413,7 @@ class ScreenOperationTwo(ScreenOperationOne):
 
  def Groupvote(self,StudentID,toGroupID):
 #小组投票
-    url11 = urljoin(self.base_url,"kesgo.Service/wcf/CoursePerformService.svc/InsertGroupEvaluation")
+    url11 = urljoin(self.base_url,"wcf/CoursePerformService.svc/InsertGroupEvaluation")
     #url11 = "http://192.168.0.167/kesgo.Service/wcf/CoursePerformService.svc/InsertGroupEvaluation"
     par11 = {"stuID":StudentID,
          "groupID":toGroupID }
@@ -427,7 +427,7 @@ class ScreenOperationTwo(ScreenOperationOne):
 
  def Personalvote(self,StudentID,Group_memberID):
 #个人投票
-    url12 = urljoin(self.base_url,"kesgo.Service/wcf/CoursePerformService.svc/AddStudentVote")
+    url12 = urljoin(self.base_url,"wcf/CoursePerformService.svc/AddStudentVote")
     #url12 = "http://192.168.0.167/kesgo.Service/wcf/CoursePerformService.svc/AddStudentVote"
     par12 = {"expID":self.ExperimentID1,
          "stuID":StudentID,
@@ -439,7 +439,7 @@ class ScreenOperationTwo(ScreenOperationOne):
     r12 = self.s.get(url12,params=par12,headers=h12)
    # print("被投票组员ID%s"%Group_memberID)
  def SaveGrowth(self,think_content):
-     SaveGrowth_url = urljoin(self.base_url,"kesgo.Service/wcf/StudentInfoService.svc/SaveGrowth")
+     SaveGrowth_url = urljoin(self.base_url,"wcf/StudentInfoService.svc/SaveGrowth")
      #SaveGrowth_url = "http://192.168.0.167/kesgo.Service/wcf/StudentInfoService.svc/SaveGrowth"
      SaveGrowth_json = {
          "growthInfo":

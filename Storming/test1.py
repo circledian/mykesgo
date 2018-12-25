@@ -4,9 +4,9 @@ import pymssql
 
 mssql_info = {"host":'192.168.0.167\SQL2008',
               #"host":'123.206.230.41',
-               "user":'kesgo',
-               "passwd":'kesgo',
-               "db":'kesgo',
+               "user":'AllPassKesgo',
+               "passwd":'AllPassKesgo',
+               "db":'AllPassKesgo',
                "charset":'utf8'}
 
 class MssqlUtil():
@@ -69,13 +69,13 @@ class MssqlUtil():
             print("数据库关闭时异常：%s"%a)
 if __name__ == "__main__":
     A = MssqlUtil()
-    sql = "select ClassSelectID from AFCS_ClassSelect where ExperimentID = '37494CCC-6123-4F0E-9D42-D1226FA8CFE9'AND ClassSelectID = '9e6854af-f0c7-4703-b677-00918d8daf7c' "
-    B = A.mssql_getrows(sql)
-    print(B)
-    a1 = B[0]
-    print(a1)
-    a2 = a1[0]  #实验下班级ID
-    print(a2)
-    A.mssql_close()
+    # sql = "select ClassSelectID from AFCS_ClassSelect where ExperimentID = '37494CCC-6123-4F0E-9D42-D1226FA8CFE9'AND ClassSelectID = '9e6854af-f0c7-4703-b677-00918d8daf7c' "
+    # B = A.mssql_getrows(sql)
+    # print(B)
+    # a1 = B[0]
+    # print(a1)
+    # a2 = a1[0]  #实验下班级ID
+    # print(a2)
+    # A.mssql_close()
 
 

@@ -123,7 +123,6 @@ if __name__ == "__main__":
 
     mb = tecphone_num()
     exname = GBK2312(3)
-    tcname = GBK2312(3)
     print("生成的手机号码是%s"%mb)
     print("生成的实验名是%s"%exname)
     cur_path = os.path.dirname(os.path.realpath(__file__))
@@ -133,7 +132,7 @@ if __name__ == "__main__":
     conf.set("experiment", "exname",exname)
     conf.write(open(configPath, "r+"))
 
-    Process(base_url).all_Technological_process(tcname,mb,exname)
+    Process(base_url).all_Technological_process(mb,exname)
     Tstorming.wexcel(base_url,base_url1,mb,exname)
     all_case = add_case(caseName="Brain_test", rule="test*.py")   #  加载用例
     # # 生成测试报告的路径
@@ -143,14 +142,14 @@ if __name__ == "__main__":
     report_path = os.path.join(cur_path, "report")  # 测试报告路径
     report_file = get_report_file(report_path)  # 获取最新的测试报告
     # #邮箱配置
-    sender = readConfig.sender
-    psw = readConfig.psw
-    smtp_server = readConfig.smtp_server
-    port = readConfig.port
-    receiver = readConfig.receiver
-    #print(sender,psw,smtp_server,port,receiver)
-    send_mail(sender, psw, receiver, smtp_server, report_file, port)
-
+    # sender = readConfig.sender
+    # psw = readConfig.psw
+    # smtp_server = readConfig.smtp_server
+    # port = readConfig.port
+    # receiver = readConfig.receiver
+    # #print(sender,psw,smtp_server,port,receiver)
+    # send_mail(sender, psw, receiver, smtp_server, report_file, port)
+    #
 
     # sender = "992147569@qq.com"
     # psw = "wccrgllaygvrbfbf"
